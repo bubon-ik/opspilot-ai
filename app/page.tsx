@@ -380,15 +380,40 @@ export default function Home() {
         <aside className="panel detailPanel">
           <div className="panelHeader">
             <div>
-              <h2>Triage inspector</h2>
-              <p>{selectedTicket ? `${selectedTicket.id} from ${selectedTicket.source}` : "Select a ticket"}</p>
+              <h2>Decision inspector</h2>
+              <p>
+                {selectedTicket
+                  ? `${selectedTicket.id} from ${selectedTicket.source}. Review the AI recommendation before action.`
+                  : "Select a ticket to review the AI decision."}
+              </p>
             </div>
           </div>
 
           {selectedTicket ? (
             <div className="detailStack">
+              {selectedResult ? (
+                <div className="decisionStrip" aria-label="Selected ticket decision summary">
+                  <div>
+                    <span>Priority</span>
+                    <strong>{selectedResult.priority}</strong>
+                  </div>
+                  <div>
+                    <span>Category</span>
+                    <strong>{selectedResult.category}</strong>
+                  </div>
+                  <div>
+                    <span>Owner</span>
+                    <strong>{selectedResult.responsibleTeam}</strong>
+                  </div>
+                  <div>
+                    <span>Confidence</span>
+                    <strong>{Math.round(selectedResult.confidence * 100)}%</strong>
+                  </div>
+                </div>
+              ) : null}
+
               <section>
-                <span className="sectionLabel">Original request</span>
+                <span className="sectionLabel">Incoming request</span>
                 <h3>{selectedTicket.title}</h3>
                 <p>{selectedTicket.description}</p>
                 <small>Created {formatDate(selectedTicket.createdAt)}</small>
@@ -397,26 +422,29 @@ export default function Home() {
               {selectedResult ? (
                 <>
                   <section className="aiSummary">
-                    <span className="sectionLabel">AI summary</span>
+                    <span className="sectionLabel">What happened</span>
                     <p>{selectedResult.summary}</p>
                   </section>
                   <section className="recommendation">
-                    <span className="sectionLabel">Recommended next action</span>
+                    <span className="sectionLabel">What to do next</span>
                     <p>{selectedResult.nextAction}</p>
                   </section>
                   <section className="draftResponse">
-                    <span className="sectionLabel">Draft response</span>
+                    <span className="sectionLabel">Message draft</span>
                     <p>{selectedResult.draftResponse}</p>
                   </section>
                   <div className="reviewActions">
                     <button type="button" onClick={() => updateStatus(selectedResult.id, "Approved")}>
-                      Approve
+                      <strong>Approve</strong>
+                      <span>Accept this triage and move the ticket forward.</span>
                     </button>
                     <button type="button" onClick={() => updateStatus(selectedResult.id, "Needs Review")}>
-                      Needs Review
+                      <strong>Needs Review</strong>
+                      <span>Keep it in the queue for a human supervisor.</span>
                     </button>
                     <button type="button" onClick={() => updateStatus(selectedResult.id, "Rejected")}>
-                      Reject
+                      <strong>Reject</strong>
+                      <span>Mark the AI recommendation as not usable.</span>
                     </button>
                   </div>
                 </>

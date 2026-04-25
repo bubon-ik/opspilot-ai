@@ -1,0 +1,11 @@
+id,title,description,source,createdAt
+OPS-2001,"Outbound truck delayed at gate 7","Carrier called to report a 55 minute delay. The loading bay is blocked by a previous trailer and the planned departure window may be missed.","Transport Coordination","2026-04-25T12:05:00Z"
+OPS-2002,"Missing customs document for Germany shipment","Shipment DE-8842 is physically ready, but the customs document is missing from the transport folder. Truck departure is scheduled in 40 minutes.","Transport Admin","2026-04-25T12:18:00Z"
+OPS-2003,"Unsafe spill near dock 2","Warehouse operator reported a liquid spill near dock 2. Loading activity in that area may need to pause until safety review is complete.","Warehouse Floor","2026-04-25T12:31:00Z"
+OPS-2004,"Afternoon wave capacity shortage","The afternoon outbound wave has 18 percent more volume than planned and the current vehicle capacity may not be enough for all pallets.","Shift Planning","2026-04-25T12:47:00Z"
+OPS-2005,"Customer escalation about late delivery","Customer is asking for an urgent update because a priority shipment missed the planned departure and affects a production deadline.","Customer Support","2026-04-25T13:02:00Z"
+OPS-2006,"Damaged pallet found before loading","Quality check found visible damage on one pallet assigned to route CZ-41. Team needs a decision before loading continues.","Quality Control","2026-04-25T13:20:00Z"
+OPS-2007,"Scan mismatch on outbound shipment","System scan shows 42 parcels, but physical count shows 41. Shipment cannot be closed until the mismatch is investigated.","Warehouse Admin","2026-04-25T13:34:00Z"
+OPS-2008,"Driver waiting without loading slot","Driver arrived early and has been waiting for 35 minutes. No loading slot is currently available in the dispatch plan.","Gate Desk","2026-04-25T13:49:00Z"
+OPS-2009,"Missing invoice reference in transport plan","Transport plan includes a shipment without invoice reference. Admin team needs to confirm whether it can depart today.","Transport Admin","2026-04-25T14:06:00Z"
+OPS-2010,"Emergency exit blocked by empty containers","Empty containers are blocking part of the emergency exit path near the staging area. Supervisor requests immediate action.","Safety Lead","2026-04-25T14:22:00Z"

@@ -635,6 +635,38 @@ tbody tr:hover {
   padding: 18px;
 }
 
+.decisionStrip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.decisionStrip div {
+  min-height: 78px;
+  padding: 12px;
+  border: 1px solid rgba(19, 32, 42, 0.11);
+  border-radius: 13px;
+  background: rgba(19, 32, 42, 0.04);
+}
+
+.decisionStrip span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.decisionStrip strong {
+  display: block;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
 .detailStack section,
 .emptyState {
   padding: 16px;
@@ -679,6 +711,28 @@ tbody tr:hover {
 .reviewActions {
   display: grid;
   grid-template-columns: 1fr;
+}
+
+.reviewActions button {
+  min-height: auto;
+  align-items: flex-start;
+  padding: 14px 16px;
+  flex-direction: column;
+  text-align: left;
+}
+
+.reviewActions button strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+
+.reviewActions button span {
+  display: block;
+  opacity: 0.82;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .reviewActions button:first-child {
