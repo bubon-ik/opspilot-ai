@@ -78,8 +78,7 @@ function strongestPriority(base: TriagePriority, boost: TriagePriority | null): 
   return order.indexOf(boost) > order.indexOf(base) ? boost : base;
 }
 
-export function createDemoTriageResults(tickets: ImportedTicket[]): TriageResult[] {
-  return tickets.map((ticket) => {
+function createFallbackTriageResult(ticket: ImportedTicket): TriageResult {
     const rule = matchRule(ticket);
     const category = rule?.category ?? "Other";
     const priority = strongestPriority(rule?.priority ?? "Low", urgencyBoost(ticket));
@@ -97,7 +96,6 @@ export function createDemoTriageResults(tickets: ImportedTicket[]): TriageResult
       confidence,
       status: "New"
     };
-  });
 }
 
 function buildNextAction(category: TriageCategory, team: string): string {
@@ -123,17 +121,17 @@ function normalizeAiResults(tickets: ImportedTicket[], raw: unknown): TriageResu
 
   return tickets.map((ticket, index) => {
     const candidate = parsed[index] as Partial<TriageResult> | undefined;
-    const demo = createDemoTriageResults([ticket])[0];
+    const fallback = createFallbackTriageResult(ticket);
 
     return {
       id: ticket.id,
-      category: isCategory(candidate?.category) ? candidate.category : demo.category,
-      priority: isPriority(candidate?.priority) ? candidate.priority : demo.priority,
-      responsibleTeam: typeof candidate?.responsibleTeam === "string" ? candidate.responsibleTeam : demo.responsibleTeam,
-      summary: typeof candidate?.summary === "string" ? candidate.summary : demo.summary,
-      nextAction: typeof candidate?.nextAction === "string" ? candidate.nextAction : demo.nextAction,
-      draftResponse: typeof candidate?.draftResponse === "string" ? candidate.draftResponse : demo.draftResponse,
-      confidence: typeof candidate?.confidence === "number" ? Math.min(Math.max(candidate.confidence, 0), 1) : demo.confidence,
+      category: isCategory(candidate?.category) ? candidate.category : fallback.category,
+      priority: isPriority(candidate?.priority) ? candidate.priority : fallback.priority,
+      responsibleTeam: typeof candidate?.responsibleTeam === "string" ? candidate.responsibleTeam : fallback.responsibleTeam,
+      summary: typeof candidate?.summary === "string" ? candidate.summary : fallback.summary,
+      nextAction: typeof candidate?.nextAction === "string" ? candidate.nextAction : fallback.nextAction,
+      draftResponse: typeof candidate?.draftResponse === "string" ? candidate.draftResponse : fallback.draftResponse,
+      confidence: typeof candidate?.confidence === "number" ? Math.min(Math.max(candidate.confidence, 0), 1) : fallback.confidence,
       status: "New"
     };
   });
@@ -169,7 +167,7 @@ function buildPrompt(tickets: ImportedTicket[]) {
 
 async function triageWithOpenAI(tickets: ImportedTicket[]): Promise<TriageResult[]> {
   if (!process.env.OPENAI_API_KEY) {
-    throw new Error("OPENAI_API_KEY is not configured. Use demo mode or add the key to your environment.");
+    throw new Error("OPENAI_API_KEY is not configured. Add the key to your environment before running OpenAI triage.");
   }
 
   const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -190,7 +188,7 @@ async function triageWithOpenAI(tickets: ImportedTicket[]): Promise<TriageResult
 
 async function triageWithClaude(tickets: ImportedTicket[]): Promise<TriageResult[]> {
   if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not configured. Use demo mode or add the key to your environment.");
+    throw new Error("ANTHROPIC_API_KEY is not configured. Add the key to your environment before running Claude triage.");
   }
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -215,12 +213,7 @@ async function triageWithClaude(tickets: ImportedTicket[]): Promise<TriageResult
 }
 
 export async function runTriage(request: TriageRequest): Promise<TriageResponse> {
-  const results =
-    request.mode === "openai"
-      ? await triageWithOpenAI(request.tickets)
-      : request.mode === "claude"
-        ? await triageWithClaude(request.tickets)
-        : createDemoTriageResults(request.tickets);
+  const results = request.mode === "openai" ? await triageWithOpenAI(request.tickets) : await triageWithClaude(request.tickets);
 
   return {
     results,
@@ -232,5 +225,5 @@ export async function runTriage(request: TriageRequest): Promise<TriageResponse>
 }
 
 export function isTriageMode(value: unknown): value is TriageMode {
-  return value === "demo" || value === "openai" || value === "claude";
+  return value === "openai" || value === "claude";
 }

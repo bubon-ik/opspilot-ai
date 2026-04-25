@@ -31,7 +31,7 @@ export type TriageResult = {
   status: TriageStatus;
 };
 
-export type TriageMode = "demo" | "openai" | "claude";
+export type TriageMode = "openai" | "claude";
 
 export type TriageRequest = {
   tickets: ImportedTicket[];

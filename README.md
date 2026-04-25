@@ -24,8 +24,7 @@ OpsPilot AI automates the first triage layer so a human can review and act faste
 
 - Imports operational tickets from CSV.
 - Validates required ticket fields.
-- Runs in demo mode without API keys.
-- Supports OpenAI or Claude for real AI triage.
+- Supports OpenAI or Claude for AI triage.
 - Classifies tickets by operational category.
 - Assigns priority and responsible team.
 - Generates summary, next action, and draft response.
@@ -46,7 +45,7 @@ Open:
 http://localhost:3000
 ```
 
-The app starts with sample operations tickets. Click `Run AI triage` in demo mode to process them without any API key.
+The app starts with sample operations tickets. Add an OpenAI or Claude API key, choose a provider in the dashboard, and click `Run AI triage`.
 
 ## Workflow
 
@@ -83,7 +82,7 @@ Example output:
 
 ## Configure Real AI Mode
 
-Demo mode works without credentials. To use real AI triage, create `.env.local` and add one or both providers.
+Create `.env.local` and add one or both providers.
 
 OpenAI:
 
@@ -129,21 +128,21 @@ public/sample-tickets.csv
 
 ```text
 app/
-  api/triage/route.ts     API route for demo, OpenAI, and Claude triage
+  api/triage/route.ts     API route for OpenAI and Claude triage
   page.tsx                Main dashboard UI
   globals.css             Product UI styling
 lib/
   csv.ts                  CSV parsing and validation
   export.ts               CSV/JSON export helpers
-  sample-data.ts          Demo operations tickets
-  triage.ts               Demo and real AI triage logic
+  sample-data.ts          Sample operations tickets
+  triage.ts               OpenAI and Claude triage logic
   types.ts                Shared TypeScript types
 public/
   sample-tickets.csv      Downloadable sample dataset
 tests/
   csv.test.ts             CSV parser tests
   export.test.ts          Export tests
-  triage.test.ts          Demo triage tests
+  triage.test.ts          Provider mode and API key tests
 ```
 
 ## API
@@ -156,7 +155,7 @@ Request:
 
 ```json
 {
-  "mode": "demo",
+  "mode": "openai",
   "tickets": [
     {
       "id": "OPS-1001",
@@ -187,7 +186,7 @@ Response:
     }
   ],
   "meta": {
-    "mode": "demo",
+    "mode": "openai",
     "processedAt": "2026-04-25T10:30:00.000Z"
   }
 }
@@ -205,11 +204,12 @@ Current automated coverage includes:
 
 - valid CSV import
 - missing CSV column validation
-- deterministic demo triage
+- provider mode validation
+- missing API key handling
 - CSV export escaping
 
 ## Deploy
 
 The app is ready for Vercel.
 
-Demo mode works without environment variables. Add `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in Vercel only if you want real AI triage mode.
+Add `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in Vercel environment variables before running AI triage in production.

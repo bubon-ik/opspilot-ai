@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     }
 
     if (!isTriageMode(payload.mode)) {
-      return NextResponse.json({ error: "Mode must be demo, openai, or claude." }, { status: 400 });
+      return NextResponse.json({ error: "Mode must be openai or claude." }, { status: 400 });
     }
 
     const response = await runTriage({

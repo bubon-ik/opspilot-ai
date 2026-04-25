@@ -79,7 +79,7 @@ export default function Home() {
   const [tickets, setTickets] = useState<ImportedTicket[]>(sampleTickets);
   const [results, setResults] = useState<TriageResult[]>([]);
   const [selectedId, setSelectedId] = useState<string>(sampleTickets[0]?.id ?? "");
-  const [mode, setMode] = useState<TriageMode>("demo");
+  const [mode, setMode] = useState<TriageMode>("openai");
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -200,7 +200,7 @@ export default function Home() {
         </a>
         <div className="navStatus">
           <span className="liveDot" />
-          Portfolio demo
+          Live triage
         </div>
         <a className="navLink" href="#docs">
           Setup notes
@@ -212,7 +212,7 @@ export default function Home() {
           <p className="eyebrow">Operations command layer</p>
           <h1>AI workflow triage dashboard for operations teams</h1>
           <p className="lede">
-            Import operational tickets, classify them with demo or real AI processing, then review priority, ownership,
+            Import operational tickets, classify them with OpenAI or Claude, then review priority, ownership,
             next action, and draft response in one focused dashboard.
           </p>
           <div className="signalLine" aria-label="Workflow summary">
@@ -240,14 +240,14 @@ export default function Home() {
 
       <section className="controlStrip" aria-label="Triage controls">
         <div className="modeGroup" aria-label="AI mode">
-          {(["demo", "openai", "claude"] as TriageMode[]).map((option) => (
+          {(["openai", "claude"] as TriageMode[]).map((option) => (
             <button
               className={mode === option ? "modeButton active" : "modeButton"}
               key={option}
               type="button"
               onClick={() => setMode(option)}
             >
-              {option === "demo" ? "Demo mode" : option === "openai" ? "OpenAI" : "Claude"}
+              {option === "openai" ? "OpenAI" : "Claude"}
             </button>
           ))}
         </div>
@@ -434,10 +434,9 @@ export default function Home() {
 
       <section className="docsPanel" id="docs">
         <div>
-          <h2>Demo setup and API behavior</h2>
+          <h2>AI setup and API behavior</h2>
           <p>
-            Demo mode is deterministic and works without credentials. Real mode uses server-side environment variables and
-            keeps imported tickets available if the AI request fails.
+            Real triage uses server-side environment variables and keeps imported tickets available if the AI request fails.
           </p>
         </div>
         <div className="docsGrid">
