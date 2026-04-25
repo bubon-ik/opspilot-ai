@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { isPublicAuthPath } from "@/lib/auth-config";
+import { clerkAuthPaths, isPublicAuthPath } from "@/lib/auth-config";
 
 describe("auth route config", () => {
+  it("defines local Clerk auth screens", () => {
+    expect(clerkAuthPaths.signInUrl).toBe("/sign-in");
+    expect(clerkAuthPaths.signUpUrl).toBe("/sign-up");
+    expect(clerkAuthPaths.fallbackRedirectUrl).toBe("/");
+  });
+
   it("keeps Clerk auth screens public", () => {
     expect(isPublicAuthPath("/sign-in")).toBe(true);
     expect(isPublicAuthPath("/sign-in/factor-one")).toBe(true);
