@@ -96,6 +96,7 @@ export default function Home() {
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [error, setError] = useState("");
   const [copyNotice, setCopyNotice] = useState("");
+  const [actionNotice, setActionNotice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [lastProcessedAt, setLastProcessedAt] = useState("");
 
@@ -215,6 +216,8 @@ export default function Home() {
           : result
       )
     );
+    setActionNotice(`${id} marked ${status}. Handoff queue updated.`);
+    window.setTimeout(() => setActionNotice(""), 2600);
   }
 
   function updateFilter(key: keyof FilterState, value: string) {
@@ -313,6 +316,7 @@ export default function Home() {
       </section>
 
       {error ? <div className="errorPanel">{error}</div> : null}
+      {actionNotice ? <div className="actionToast">{actionNotice}</div> : null}
 
       <section className="metricsGrid" aria-label="Triage metrics">
         <article>

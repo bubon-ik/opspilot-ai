@@ -395,6 +395,36 @@ h1 {
   font-weight: 760;
 }
 
+.actionToast {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 40;
+  max-width: min(420px, calc(100% - 36px));
+  padding: 14px 16px;
+  border: 1px solid rgba(143, 208, 189, 0.28);
+  border-radius: 14px;
+  color: #fffdf4;
+  background:
+    linear-gradient(135deg, rgba(31, 95, 84, 0.96), rgba(19, 32, 42, 0.94)),
+    var(--accent-dark);
+  box-shadow: 0 22px 55px rgba(19, 32, 42, 0.28);
+  font-size: 14px;
+  font-weight: 820;
+  animation: toastIn 220ms ease-out;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
