@@ -25,6 +25,7 @@ OpsPilot AI automates the first triage layer so a human can review and act faste
 - Imports operational tickets from CSV.
 - Validates required ticket fields.
 - Supports OpenAI or Claude for AI triage.
+- Protects the dashboard and triage API with Clerk authentication.
 - Classifies tickets by operational category.
 - Assigns priority and responsible team.
 - Generates summary, next action, and draft response.
@@ -45,7 +46,14 @@ Open:
 http://localhost:3000
 ```
 
-The app starts with sample operations tickets. Add your OpenAI or Claude API key in the dashboard, choose a provider, and click `Run AI triage`.
+Create a Clerk application and add the auth keys to `.env.local`:
+
+```text
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key_here
+CLERK_SECRET_KEY=your_clerk_secret_key_here
+```
+
+The app redirects signed-out users to `/sign-in`. After signing in, it starts with sample operations tickets. Add your OpenAI or Claude API key in the dashboard, choose a provider, and click `Run AI triage`.
 
 ## Workflow
 
@@ -131,9 +139,12 @@ public/sample-tickets.csv
 ```text
 app/
   api/triage/route.ts     API route for OpenAI and Claude triage
+  sign-in/                Clerk sign-in route
+  sign-up/                Clerk sign-up route
   page.tsx                Main dashboard UI
   globals.css             Product UI styling
 lib/
+  auth-config.ts          Shared Clerk public route config
   csv.ts                  CSV parsing and validation
   export.ts               CSV/JSON export helpers
   sample-data.ts          Sample operations tickets
@@ -142,6 +153,7 @@ lib/
 public/
   sample-tickets.csv      Downloadable sample dataset
 tests/
+  auth-config.test.ts     Auth route config tests
   csv.test.ts             CSV parser tests
   export.test.ts          Export tests
   triage.test.ts          Provider mode and API key tests
@@ -223,5 +235,12 @@ Set `ANTHROPIC_API_KEY` in `.env.local` before running the integration test.
 ## Deploy
 
 The app is ready for Vercel.
+
+Set these Vercel environment variables:
+
+```text
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+CLERK_SECRET_KEY
+```
 
 No shared production AI key is required. Users paste their own OpenAI or Claude key in the dashboard before running triage.

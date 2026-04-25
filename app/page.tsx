@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, useMemo, useState } from "react";
+import { UserButton } from "@clerk/nextjs";
 import { exportResultsToCsv, exportResultsToJson, filterResultsForHandoff, type HandoffQueue } from "@/lib/export";
 import { parseTicketsCsv } from "@/lib/csv";
 import { sampleCsv, sampleTickets } from "@/lib/sample-data";
@@ -272,6 +273,9 @@ export default function Home() {
         <a className="navLink" href="#docs">
           Setup notes
         </a>
+        <div className="userMenu">
+          <UserButton />
+        </div>
       </nav>
 
       <section className="topbar">
