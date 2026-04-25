@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "vitest run",
+    "test": "vitest run --exclude tests/**/*.integration.test.ts",
+    "test:claude": "vitest run tests/claude.integration.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

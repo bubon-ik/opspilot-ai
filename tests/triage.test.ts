@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { POST } from "@/app/api/triage/route";
-import { isTriageMode, runTriage } from "@/lib/triage";
+import { extractJsonPayload, isTriageMode, runTriage } from "@/lib/triage";
 import type { ImportedTicket } from "@/lib/types";
 
 const tickets: ImportedTicket[] = [
@@ -50,6 +50,14 @@ describe("runTriage", () => {
     } else {
       process.env.ANTHROPIC_API_KEY = previousKey;
     }
+  });
+});
+
+describe("extractJsonPayload", () => {
+  it("extracts JSON from a fenced Claude response", () => {
+    const payload = extractJsonPayload('```json\n[{"id":"OPS-1","category":"Delay"}]\n```');
+
+    expect(payload).toBe('[{"id":"OPS-1","category":"Delay"}]');
   });
 });
 

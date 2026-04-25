@@ -95,7 +95,7 @@ Claude:
 
 ```text
 ANTHROPIC_API_KEY=your_key_here
-ANTHROPIC_MODEL=claude-sonnet-4-5
+ANTHROPIC_MODEL=claude-sonnet-4-20250514
 ```
 
 Then select `OpenAI` or `Claude` in the dashboard before running triage.
@@ -207,6 +207,15 @@ Current automated coverage includes:
 - provider mode validation
 - missing API key handling
 - CSV export escaping
+
+Run the real Claude integration test:
+
+```bash
+cp .env.example .env.local
+npm run test:claude
+```
+
+Set `ANTHROPIC_API_KEY` in `.env.local` before running the integration test.
 
 ## Deploy
 

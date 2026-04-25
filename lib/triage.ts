@@ -165,6 +165,17 @@ function buildPrompt(tickets: ImportedTicket[]) {
   ].join("\n");
 }
 
+export function extractJsonPayload(text: string): string {
+  const trimmed = text.trim();
+  const fencedMatch = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+
+  if (fencedMatch?.[1]) {
+    return fencedMatch[1].trim();
+  }
+
+  return trimmed;
+}
+
 async function triageWithOpenAI(tickets: ImportedTicket[]): Promise<TriageResult[]> {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY is not configured. Add the key to your environment before running OpenAI triage.");
@@ -182,7 +193,7 @@ async function triageWithOpenAI(tickets: ImportedTicket[]): Promise<TriageResult
     ]
   });
 
-  const content = completion.choices[0]?.message.content ?? "[]";
+  const content = extractJsonPayload(completion.choices[0]?.message.content ?? "[]");
   return normalizeAiResults(tickets, JSON.parse(content));
 }
 
@@ -193,7 +204,7 @@ async function triageWithClaude(tickets: ImportedTicket[]): Promise<TriageResult
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const message = await client.messages.create({
-    model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-5",
+    model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-20250514",
     max_tokens: 2500,
     temperature: 0.2,
     messages: [
@@ -209,7 +220,7 @@ async function triageWithClaude(tickets: ImportedTicket[]): Promise<TriageResult
     .join("")
     .trim();
 
-  return normalizeAiResults(tickets, JSON.parse(text || "[]"));
+  return normalizeAiResults(tickets, JSON.parse(extractJsonPayload(text || "[]")));
 }
 
 export async function runTriage(request: TriageRequest): Promise<TriageResponse> {
