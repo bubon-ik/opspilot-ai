@@ -4,7 +4,7 @@
 
 OpsPilot AI turns messy operational tickets into a prioritized, reviewable workflow. Import tickets from CSV, run AI triage, and get structured outputs: category, priority, responsible team, summary, next action, draft response, confidence, and review status.
 
-This is a portfolio SaaS project built to demonstrate practical AI automation, API processing, React dashboard work, and clear technical documentation.
+Use it to turn raw operational requests into a queue your team can review, approve, reject, export, and act on.
 
 ## Problem
 
@@ -20,20 +20,35 @@ Before anyone can act, someone has to manually answer the same questions:
 
 OpsPilot AI automates the first triage layer so a human can review and act faster.
 
-## What It Does
+## Features
 
 - Imports operational tickets from CSV.
 - Validates required ticket fields.
-- Runs triage in demo mode without API keys.
-- Supports real AI mode with OpenAI or Claude API keys.
+- Runs in demo mode without API keys.
+- Supports OpenAI or Claude for real AI triage.
 - Classifies tickets by operational category.
 - Assigns priority and responsible team.
 - Generates summary, next action, and draft response.
 - Provides human review controls: `Approve`, `Needs Review`, `Reject`.
 - Filters by priority, category, team, and status.
-- Exports AI results as CSV or JSON.
+- Exports triage results as CSV or JSON.
 
-## Demo Workflow
+## Quick Start
+
+```bash
+npm install
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+The app starts with sample operations tickets. Click `Run AI triage` in demo mode to process them without any API key.
+
+## Workflow
 
 ```text
 CSV tickets
@@ -66,6 +81,40 @@ Example output:
 }
 ```
 
+## Configure Real AI Mode
+
+Demo mode works without credentials. To use real AI triage, create `.env.local` and add one or both providers.
+
+OpenAI:
+
+```text
+OPENAI_API_KEY=your_key_here
+OPENAI_MODEL=gpt-4.1-mini
+```
+
+Claude:
+
+```text
+ANTHROPIC_API_KEY=your_key_here
+ANTHROPIC_MODEL=claude-sonnet-4-5
+```
+
+Then select `OpenAI` or `Claude` in the dashboard before running triage.
+
+## CSV Format
+
+Required columns:
+
+```text
+id,title,description,source,createdAt
+```
+
+A sample file is included at:
+
+```text
+public/sample-tickets.csv
+```
+
 ## Tech Stack
 
 - **Next.js 16**
@@ -95,44 +144,6 @@ tests/
   csv.test.ts             CSV parser tests
   export.test.ts          Export tests
   triage.test.ts          Demo triage tests
-```
-
-## CSV Format
-
-Required columns:
-
-```text
-id,title,description,source,createdAt
-```
-
-A sample file is included at:
-
-```text
-public/sample-tickets.csv
-```
-
-## AI Modes
-
-### Demo Mode
-
-Demo mode works without credentials. It uses deterministic triage rules so the app can be tested and shown as a portfolio demo with no paid API usage.
-
-### OpenAI Mode
-
-Create `.env.local`:
-
-```text
-OPENAI_API_KEY=your_key_here
-OPENAI_MODEL=gpt-4.1-mini
-```
-
-### Claude Mode
-
-Create `.env.local`:
-
-```text
-ANTHROPIC_API_KEY=your_key_here
-ANTHROPIC_MODEL=claude-sonnet-4-5
 ```
 
 ## API
@@ -182,26 +193,6 @@ Response:
 }
 ```
 
-## Local Development
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Open:
-
-```text
-http://localhost:3000
-```
-
 ## Verification
 
 ```bash
@@ -222,18 +213,3 @@ Current automated coverage includes:
 The app is ready for Vercel.
 
 Demo mode works without environment variables. Add `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in Vercel only if you want real AI triage mode.
-
-## Portfolio Case Summary
-
-**OpsPilot AI — AI Workflow Triage Dashboard**
-
-Built a Next.js/TypeScript SaaS prototype that imports operational tickets from CSV, processes them through demo or real AI triage, and returns structured workflow decisions in a review dashboard.
-
-This project demonstrates:
-
-- API automation
-- AI processing with OpenAI/Claude
-- CSV validation and export
-- operations-focused workflow design
-- human-in-the-loop review UX
-- technical documentation and setup clarity
