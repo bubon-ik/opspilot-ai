@@ -1,5 +1,7 @@
 import type { TriageResult } from "./types";
 
+export type HandoffQueue = "approved" | "review" | "rejected";
+
 const EXPORT_HEADERS: Array<keyof TriageResult> = [
   "id",
   "category",
@@ -29,4 +31,16 @@ export function exportResultsToCsv(results: TriageResult[]): string {
 
 export function exportResultsToJson(results: TriageResult[]): string {
   return JSON.stringify(results, null, 2);
+}
+
+export function filterResultsForHandoff(results: TriageResult[], queue: HandoffQueue): TriageResult[] {
+  if (queue === "approved") {
+    return results.filter((result) => result.status === "Approved");
+  }
+
+  if (queue === "review") {
+    return results.filter((result) => result.status === "Needs Review");
+  }
+
+  return results.filter((result) => result.status === "Rejected");
 }

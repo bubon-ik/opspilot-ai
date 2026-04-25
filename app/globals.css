@@ -440,6 +440,102 @@ td span,
   font-variant-numeric: tabular-nums;
 }
 
+.handoffPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) auto;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 20px;
+  border: 1px solid rgba(19, 32, 42, 0.14);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(19, 32, 42, 0.96), rgba(29, 45, 55, 0.92)),
+    var(--navy);
+  color: #fffdf4;
+  box-shadow: var(--shadow);
+}
+
+.handoffPanel .sectionLabel {
+  color: #8fd0bd;
+}
+
+.handoffPanel h2 {
+  margin-bottom: 8px;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.handoffPanel p {
+  margin-bottom: 0;
+  color: rgba(255, 253, 244, 0.68);
+  line-height: 1.48;
+}
+
+.handoffQueues {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.handoffQueues article {
+  min-height: 136px;
+  padding: 14px;
+  border: 1px solid rgba(255, 253, 244, 0.13);
+  border-radius: 14px;
+  background: rgba(255, 253, 244, 0.07);
+}
+
+.handoffQueues span {
+  display: block;
+  color: rgba(255, 253, 244, 0.66);
+  font-size: 12px;
+  font-weight: 820;
+}
+
+.handoffQueues strong {
+  display: block;
+  margin: 9px 0 14px;
+  font-family:
+    "SF Mono",
+    "IBM Plex Mono",
+    ui-monospace,
+    monospace;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.handoffQueues button,
+.handoffActions button {
+  min-height: 38px;
+  width: 100%;
+  border: 1px solid rgba(255, 253, 244, 0.18);
+  border-radius: 10px;
+  color: #fffdf4;
+  background: rgba(255, 253, 244, 0.1);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.handoffQueues button:not(:disabled):hover,
+.handoffActions button:not(:disabled):hover {
+  background: rgba(255, 253, 244, 0.16);
+}
+
+.handoffActions {
+  display: grid;
+  gap: 10px;
+  min-width: 170px;
+}
+
+.handoffActions span {
+  color: #9ee1c0;
+  font-size: 12px;
+  font-weight: 760;
+  text-align: center;
+}
+
 .workspaceGrid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -826,7 +922,8 @@ code {
 
 @media (max-width: 1120px) {
   .topbar,
-  .docsPanel {
+  .docsPanel,
+  .handoffPanel {
     grid-template-columns: 1fr;
   }
 
@@ -840,6 +937,7 @@ code {
   }
 
   .metricsGrid,
+  .handoffQueues,
   .docsGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -889,6 +987,7 @@ code {
   }
 
   .metricsGrid,
+  .handoffQueues,
   .docsGrid {
     grid-template-columns: 1fr;
   }

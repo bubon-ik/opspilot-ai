@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useMemo, useState } from "react";
-import { exportResultsToCsv, exportResultsToJson } from "@/lib/export";
+import { exportResultsToCsv, exportResultsToJson, filterResultsForHandoff, type HandoffQueue } from "@/lib/export";
 import { parseTicketsCsv } from "@/lib/csv";
 import { sampleCsv, sampleTickets } from "@/lib/sample-data";
 import type { ImportedTicket, TriageMode, TriageResponse, TriageResult, TriageStatus } from "@/lib/types";
@@ -95,6 +95,7 @@ export default function Home() {
   const [mode, setMode] = useState<TriageMode>("openai");
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [error, setError] = useState("");
+  const [copyNotice, setCopyNotice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [lastProcessedAt, setLastProcessedAt] = useState("");
 
@@ -128,6 +129,14 @@ export default function Home() {
       high,
       review,
       avgConfidence
+    };
+  }, [results]);
+
+  const handoffQueues = useMemo(() => {
+    return {
+      approved: filterResultsForHandoff(results, "approved"),
+      review: filterResultsForHandoff(results, "review"),
+      rejected: filterResultsForHandoff(results, "rejected")
     };
   }, [results]);
 
@@ -213,6 +222,28 @@ export default function Home() {
       ...current,
       [key]: value
     }));
+  }
+
+  function exportHandoffQueue(queue: HandoffQueue) {
+    const queueResults = filterResultsForHandoff(results, queue);
+    const filename = `opspilot-${queue}-handoff.csv`;
+    downloadFile(filename, exportResultsToCsv(queueResults), "text/csv");
+  }
+
+  async function copySlackSummary() {
+    const lines = [
+      "OpsPilot AI handoff summary",
+      `Approved: ${handoffQueues.approved.length}`,
+      `Needs supervisor: ${handoffQueues.review.length}`,
+      `Rejected: ${handoffQueues.rejected.length}`,
+      "",
+      ...handoffQueues.approved.slice(0, 5).map((result) => `Approved ${result.id}: ${result.nextAction}`),
+      ...handoffQueues.review.slice(0, 5).map((result) => `Needs review ${result.id}: ${result.summary}`)
+    ];
+
+    await navigator.clipboard.writeText(lines.join("\n"));
+    setCopyNotice("Slack summary copied");
+    window.setTimeout(() => setCopyNotice(""), 2200);
   }
 
   return (
@@ -304,6 +335,46 @@ export default function Home() {
           <span>Avg confidence</span>
           <strong>{metrics.avgConfidence}%</strong>
         </article>
+      </section>
+
+      <section className="handoffPanel" aria-label="Outbound handoff panel">
+        <div>
+          <span className="sectionLabel">Outbound handoff</span>
+          <h2>Send reviewed work downstream</h2>
+          <p>
+            Once an operator chooses a review decision, OpsPilot separates tickets into export-ready, supervisor review,
+            and rejected queues.
+          </p>
+        </div>
+        <div className="handoffQueues">
+          <article>
+            <span>Ready to hand off</span>
+            <strong>{handoffQueues.approved.length}</strong>
+            <button disabled={handoffQueues.approved.length === 0} type="button" onClick={() => exportHandoffQueue("approved")}>
+              Export approved
+            </button>
+          </article>
+          <article>
+            <span>Needs supervisor</span>
+            <strong>{handoffQueues.review.length}</strong>
+            <button disabled={handoffQueues.review.length === 0} type="button" onClick={() => exportHandoffQueue("review")}>
+              Export review queue
+            </button>
+          </article>
+          <article>
+            <span>Rejected</span>
+            <strong>{handoffQueues.rejected.length}</strong>
+            <button disabled={handoffQueues.rejected.length === 0} type="button" onClick={() => exportHandoffQueue("rejected")}>
+              Export rejected
+            </button>
+          </article>
+        </div>
+        <div className="handoffActions">
+          <button disabled={results.length === 0} type="button" onClick={copySlackSummary}>
+            Copy Slack summary
+          </button>
+          {copyNotice ? <span>{copyNotice}</span> : null}
+        </div>
       </section>
 
       <section className="workspaceGrid" id="queue">
