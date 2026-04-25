@@ -38,6 +38,7 @@ export type TriageMode = "openai" | "claude";
 export type TriageRequest = {
   tickets: ImportedTicket[];
   mode: TriageMode;
+  apiKey?: string;
 };
 
 export type TriageResponse = {

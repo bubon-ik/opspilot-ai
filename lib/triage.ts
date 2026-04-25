@@ -176,12 +176,21 @@ export function extractJsonPayload(text: string): string {
   return trimmed;
 }
 
-async function triageWithOpenAI(tickets: ImportedTicket[]): Promise<TriageResult[]> {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error("OPENAI_API_KEY is not configured. Add the key to your environment before running OpenAI triage.");
+export function resolveProviderApiKey(mode: TriageMode, apiKey?: string): string {
+  const trimmedApiKey = apiKey?.trim();
+  const envKey = mode === "openai" ? process.env.OPENAI_API_KEY : process.env.ANTHROPIC_API_KEY;
+  const resolvedApiKey = trimmedApiKey || envKey;
+
+  if (!resolvedApiKey) {
+    throw new Error(mode === "openai" ? "Add your OpenAI API key before running triage." : "Add your Claude API key before running triage.");
   }
 
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  return resolvedApiKey;
+}
+
+async function triageWithOpenAI(tickets: ImportedTicket[], apiKey?: string): Promise<TriageResult[]> {
+  const resolvedApiKey = resolveProviderApiKey("openai", apiKey);
+  const client = new OpenAI({ apiKey: resolvedApiKey });
   const completion = await client.chat.completions.create({
     model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
     temperature: 0.2,
@@ -197,12 +206,9 @@ async function triageWithOpenAI(tickets: ImportedTicket[]): Promise<TriageResult
   return normalizeAiResults(tickets, JSON.parse(content));
 }
 
-async function triageWithClaude(tickets: ImportedTicket[]): Promise<TriageResult[]> {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not configured. Add the key to your environment before running Claude triage.");
-  }
-
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+async function triageWithClaude(tickets: ImportedTicket[], apiKey?: string): Promise<TriageResult[]> {
+  const resolvedApiKey = resolveProviderApiKey("claude", apiKey);
+  const client = new Anthropic({ apiKey: resolvedApiKey });
   const message = await client.messages.create({
     model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-20250514",
     max_tokens: 2500,
@@ -224,7 +230,10 @@ async function triageWithClaude(tickets: ImportedTicket[]): Promise<TriageResult
 }
 
 export async function runTriage(request: TriageRequest): Promise<TriageResponse> {
-  const results = request.mode === "openai" ? await triageWithOpenAI(request.tickets) : await triageWithClaude(request.tickets);
+  const results =
+    request.mode === "openai"
+      ? await triageWithOpenAI(request.tickets, request.apiKey)
+      : await triageWithClaude(request.tickets, request.apiKey);
 
   return {
     results,

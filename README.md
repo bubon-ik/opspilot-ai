@@ -45,7 +45,7 @@ Open:
 http://localhost:3000
 ```
 
-The app starts with sample operations tickets. Add an OpenAI or Claude API key, choose a provider in the dashboard, and click `Run AI triage`.
+The app starts with sample operations tickets. Add your OpenAI or Claude API key in the dashboard, choose a provider, and click `Run AI triage`.
 
 ## Workflow
 
@@ -80,9 +80,11 @@ Example output:
 }
 ```
 
-## Configure Real AI Mode
+## API Keys
 
-Create `.env.local` and add one or both providers.
+OpsPilot AI uses bring-your-own-key requests from the dashboard. The API key is sent to the server only for the current triage request, is not saved to a database, and is not exported with results.
+
+For local integration tests, you can also create `.env.local` and add one or both providers.
 
 OpenAI:
 
@@ -156,6 +158,7 @@ Request:
 ```json
 {
   "mode": "openai",
+  "apiKey": "sk-...",
   "tickets": [
     {
       "id": "OPS-1001",
@@ -221,4 +224,4 @@ Set `ANTHROPIC_API_KEY` in `.env.local` before running the integration test.
 
 The app is ready for Vercel.
 
-Add `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in Vercel environment variables before running AI triage in production.
+No shared production AI key is required. Users paste their own OpenAI or Claude key in the dashboard before running triage.

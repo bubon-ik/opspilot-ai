@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { POST } from "@/app/api/triage/route";
-import { extractJsonPayload, isTriageMode, runTriage } from "@/lib/triage";
+import { extractJsonPayload, isTriageMode, resolveProviderApiKey } from "@/lib/triage";
 import type { ImportedTicket } from "@/lib/types";
 
 const tickets: ImportedTicket[] = [
@@ -21,14 +21,12 @@ describe("isTriageMode", () => {
   });
 });
 
-describe("runTriage", () => {
+describe("resolveProviderApiKey", () => {
   it("requires an OpenAI API key for OpenAI mode", async () => {
     const previousKey = process.env.OPENAI_API_KEY;
     delete process.env.OPENAI_API_KEY;
 
-    await expect(runTriage({ tickets, mode: "openai" })).rejects.toThrow(
-      "OPENAI_API_KEY is not configured. Add the key to your environment before running OpenAI triage."
-    );
+    expect(() => resolveProviderApiKey("openai")).toThrow("Add your OpenAI API key before running triage.");
 
     if (previousKey === undefined) {
       delete process.env.OPENAI_API_KEY;
@@ -41,9 +39,20 @@ describe("runTriage", () => {
     const previousKey = process.env.ANTHROPIC_API_KEY;
     delete process.env.ANTHROPIC_API_KEY;
 
-    await expect(runTriage({ tickets, mode: "claude" })).rejects.toThrow(
-      "ANTHROPIC_API_KEY is not configured. Add the key to your environment before running Claude triage."
-    );
+    expect(() => resolveProviderApiKey("claude")).toThrow("Add your Claude API key before running triage.");
+
+    if (previousKey === undefined) {
+      delete process.env.ANTHROPIC_API_KEY;
+    } else {
+      process.env.ANTHROPIC_API_KEY = previousKey;
+    }
+  });
+
+  it("accepts a per-request Claude API key", async () => {
+    const previousKey = process.env.ANTHROPIC_API_KEY;
+    delete process.env.ANTHROPIC_API_KEY;
+
+    expect(resolveProviderApiKey("claude", " test-request-key ")).toBe("test-request-key");
 
     if (previousKey === undefined) {
       delete process.env.ANTHROPIC_API_KEY;
@@ -77,5 +86,31 @@ describe("POST /api/triage", () => {
     await expect(response.json()).resolves.toEqual({
       error: "Mode must be openai or claude."
     });
+  });
+
+  it("returns a provider-specific API key error when no key is provided", async () => {
+    const previousKey = process.env.ANTHROPIC_API_KEY;
+    delete process.env.ANTHROPIC_API_KEY;
+
+    const response = await POST(
+      new Request("http://localhost/api/triage", {
+        method: "POST",
+        body: JSON.stringify({
+          mode: "claude",
+          tickets
+        })
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: "Add your Claude API key before running triage."
+    });
+
+    if (previousKey === undefined) {
+      delete process.env.ANTHROPIC_API_KEY;
+    } else {
+      process.env.ANTHROPIC_API_KEY = previousKey;
+    }
   });
 });

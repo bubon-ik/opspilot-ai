@@ -93,6 +93,7 @@ export default function Home() {
   const [results, setResults] = useState<TriageResult[]>([]);
   const [selectedId, setSelectedId] = useState<string>(sampleTickets[0]?.id ?? "");
   const [mode, setMode] = useState<TriageMode>("openai");
+  const [apiKey, setApiKey] = useState("");
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [error, setError] = useState("");
   const [copyNotice, setCopyNotice] = useState("");
@@ -143,6 +144,13 @@ export default function Home() {
 
   async function runAiTriage(nextMode = mode) {
     setError("");
+    const trimmedApiKey = apiKey.trim();
+
+    if (!trimmedApiKey) {
+      setError(nextMode === "openai" ? "Add your OpenAI API key before running triage." : "Add your Claude API key before running triage.");
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
@@ -153,7 +161,8 @@ export default function Home() {
         },
         body: JSON.stringify({
           tickets,
-          mode: nextMode
+          mode: nextMode,
+          apiKey: trimmedApiKey
         })
       });
 
@@ -309,6 +318,19 @@ export default function Home() {
             </button>
           ))}
         </div>
+        <label className="apiKeyField">
+          <span>{mode === "openai" ? "OpenAI API key" : "Claude API key"}</span>
+          <input
+            autoComplete="off"
+            aria-label={mode === "openai" ? "OpenAI API key" : "Claude API key"}
+            placeholder={mode === "openai" ? "sk-..." : "sk-ant-..."}
+            spellCheck={false}
+            type="password"
+            value={apiKey}
+            onChange={(event) => setApiKey(event.target.value)}
+          />
+          <small>Used for this request only. Not stored or exported.</small>
+        </label>
         <button className="primaryButton" disabled={isProcessing || tickets.length === 0} type="button" onClick={() => runAiTriage()}>
           {isProcessing ? "Processing tickets" : "Run AI triage"}
         </button>
@@ -587,7 +609,8 @@ export default function Home() {
         <div>
           <h2>AI setup and API behavior</h2>
           <p>
-            Real triage uses server-side environment variables and keeps imported tickets available if the AI request fails.
+            OpsPilot uses bring-your-own-key AI requests. The key is sent only for the current triage run,
+            never stored in browser state beyond the open page, and never included in exports.
           </p>
         </div>
         <div className="docsGrid">
@@ -597,11 +620,11 @@ export default function Home() {
           </article>
           <article>
             <h3>OpenAI</h3>
-            <code>OPENAI_API_KEY</code>
+            <code>Paste sk-... in the dashboard</code>
           </article>
           <article>
             <h3>Claude</h3>
-            <code>ANTHROPIC_API_KEY</code>
+            <code>Paste sk-ant-... in the dashboard</code>
           </article>
           <article>
             <h3>Endpoint</h3>

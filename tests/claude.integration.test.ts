@@ -63,7 +63,8 @@ describe("Claude integration", () => {
 
       const response = await runTriage({
         mode: "claude",
-        tickets
+        tickets,
+        apiKey: process.env.ANTHROPIC_API_KEY
       });
 
       expect(response.meta.mode).toBe("claude");

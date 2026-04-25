@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Request body must be an object." }, { status: 400 });
     }
 
-    const payload = body as { tickets?: unknown; mode?: unknown };
+    const payload = body as { tickets?: unknown; mode?: unknown; apiKey?: unknown };
 
     if (!Array.isArray(payload.tickets) || !payload.tickets.every(isImportedTicket)) {
       return NextResponse.json({ error: "Request must include valid tickets." }, { status: 400 });
@@ -35,9 +35,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Mode must be openai or claude." }, { status: 400 });
     }
 
+    const apiKey = typeof payload.apiKey === "string" ? payload.apiKey.trim() : "";
+
+    if (!apiKey) {
+      return NextResponse.json(
+        {
+          error: payload.mode === "openai" ? "Add your OpenAI API key before running triage." : "Add your Claude API key before running triage."
+        },
+        { status: 400 }
+      );
+    }
+
     const response = await runTriage({
       tickets: payload.tickets,
-      mode: payload.mode
+      mode: payload.mode,
+      apiKey
     });
 
     return NextResponse.json(response);
