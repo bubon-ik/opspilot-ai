@@ -9,11 +9,13 @@ const EXPORT_HEADERS: Array<keyof TriageResult> = [
   "nextAction",
   "draftResponse",
   "confidence",
-  "status"
+  "status",
+  "reviewedAt",
+  "handoffState"
 ];
 
-function escapeCsvCell(value: string | number): string {
-  const text = String(value);
+function escapeCsvCell(value: string | number | undefined): string {
+  const text = value === undefined ? "" : String(value);
   if (text.includes(",") || text.includes('"') || text.includes("\n")) {
     return `"${text.replaceAll('"', '""')}"`;
   }

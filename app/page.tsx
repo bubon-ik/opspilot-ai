@@ -75,6 +75,19 @@ function statusClass(status: TriageStatus) {
   return "status";
 }
 
+function handoffForStatus(status: TriageStatus) {
+  if (status === "Approved") {
+    return "Ready for export or downstream handoff";
+  }
+  if (status === "Needs Review") {
+    return "Supervisor review";
+  }
+  if (status === "Rejected") {
+    return "AI recommendation rejected";
+  }
+  return "Awaiting operator decision";
+}
+
 export default function Home() {
   const [tickets, setTickets] = useState<ImportedTicket[]>(sampleTickets);
   const [results, setResults] = useState<TriageResult[]>([]);
@@ -181,7 +194,18 @@ export default function Home() {
   }
 
   function updateStatus(id: string, status: TriageStatus) {
-    setResults((current) => current.map((result) => (result.id === id ? { ...result, status } : result)));
+    setResults((current) =>
+      current.map((result) =>
+        result.id === id
+          ? {
+              ...result,
+              status,
+              reviewedAt: new Date().toISOString(),
+              handoffState: handoffForStatus(status)
+            }
+          : result
+      )
+    );
   }
 
   function updateFilter(key: keyof FilterState, value: string) {
@@ -409,6 +433,10 @@ export default function Home() {
                     <span>Confidence</span>
                     <strong>{Math.round(selectedResult.confidence * 100)}%</strong>
                   </div>
+                  <div>
+                    <span>Decision</span>
+                    <strong>{selectedResult.handoffState ?? handoffForStatus(selectedResult.status)}</strong>
+                  </div>
                 </div>
               ) : null}
 
@@ -433,16 +461,36 @@ export default function Home() {
                     <span className="sectionLabel">Message draft</span>
                     <p>{selectedResult.draftResponse}</p>
                   </section>
+                  <div className="decisionReceipt">
+                    <span className={statusClass(selectedResult.status)}>{selectedResult.status}</span>
+                    <p>
+                      {selectedResult.reviewedAt
+                        ? `Reviewed ${formatDate(selectedResult.reviewedAt)}. ${selectedResult.handoffState}.`
+                        : "No operator decision yet. Choose an action below to update the queue and export state."}
+                    </p>
+                  </div>
                   <div className="reviewActions">
-                    <button type="button" onClick={() => updateStatus(selectedResult.id, "Approved")}>
+                    <button
+                      className={selectedResult.status === "Approved" ? "activeReviewAction" : ""}
+                      type="button"
+                      onClick={() => updateStatus(selectedResult.id, "Approved")}
+                    >
                       <strong>Approve</strong>
                       <span>Accept this triage and move the ticket forward.</span>
                     </button>
-                    <button type="button" onClick={() => updateStatus(selectedResult.id, "Needs Review")}>
+                    <button
+                      className={selectedResult.status === "Needs Review" ? "activeReviewAction" : ""}
+                      type="button"
+                      onClick={() => updateStatus(selectedResult.id, "Needs Review")}
+                    >
                       <strong>Needs Review</strong>
                       <span>Keep it in the queue for a human supervisor.</span>
                     </button>
-                    <button type="button" onClick={() => updateStatus(selectedResult.id, "Rejected")}>
+                    <button
+                      className={selectedResult.status === "Rejected" ? "activeReviewAction" : ""}
+                      type="button"
+                      onClick={() => updateStatus(selectedResult.id, "Rejected")}
+                    >
                       <strong>Reject</strong>
                       <span>Mark the AI recommendation as not usable.</span>
                     </button>

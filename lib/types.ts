@@ -29,6 +29,8 @@ export type TriageResult = {
   draftResponse: string;
   confidence: number;
   status: TriageStatus;
+  reviewedAt?: string;
+  handoffState?: string;
 };
 
 export type TriageMode = "openai" | "claude";

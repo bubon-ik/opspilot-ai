@@ -708,6 +708,23 @@ tbody tr:hover {
   border-left: 5px solid #596873 !important;
 }
 
+.decisionReceipt {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid rgba(19, 32, 42, 0.11);
+  border-radius: 13px;
+  background: rgba(19, 32, 42, 0.035);
+}
+
+.decisionReceipt p {
+  margin: 0;
+  color: #34414b;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .reviewActions {
   display: grid;
   grid-template-columns: 1fr;
@@ -751,6 +768,11 @@ tbody tr:hover {
   color: #762019;
   border-color: rgba(163, 60, 50, 0.24);
   background: #fff0ed;
+}
+
+.reviewActions button.activeReviewAction {
+  outline: 3px solid rgba(47, 125, 109, 0.18);
+  box-shadow: 0 14px 32px rgba(47, 125, 109, 0.18);
 }
 
 .emptyState {
