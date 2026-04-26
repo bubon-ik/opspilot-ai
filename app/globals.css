@@ -1,22 +1,28 @@
 :root {
-  --bg: #e9edf0;
-  --ink: #101820;
-  --muted: #65717c;
-  --soft: #f7f7f2;
-  --surface: rgba(248, 248, 242, 0.92);
-  --surface-strong: #fffff8;
+  --bg: #e5e9e8;
+  --ink: #111a20;
+  --muted: #65727b;
+  --soft: #f6f3ea;
+  --surface: rgba(250, 248, 239, 0.9);
+  --surface-strong: #fffdf4;
   --line: rgba(33, 45, 54, 0.14);
   --line-strong: rgba(33, 45, 54, 0.24);
-  --navy: #13202a;
-  --navy-2: #1d2d37;
-  --accent: #2f7d6d;
-  --accent-dark: #1f5f54;
-  --amber: #b96d2c;
-  --red: #a33c32;
-  --green: #2e7250;
-  --blue: #315d7d;
-  --shadow: 0 24px 70px rgba(22, 33, 42, 0.16);
-  --shadow-soft: 0 16px 45px rgba(22, 33, 42, 0.08);
+  --navy: #111d24;
+  --navy-2: #1b2a31;
+  --navy-3: #24343a;
+  --accent: #2d8472;
+  --accent-dark: #1c6559;
+  --accent-soft: #d8efe6;
+  --amber: #b26a2f;
+  --red: #a0463c;
+  --green: #2e7353;
+  --blue: #3b647e;
+  --shadow: 0 30px 90px rgba(18, 29, 36, 0.2);
+  --shadow-soft: 0 18px 54px rgba(18, 29, 36, 0.1);
+  --shadow-hover: 0 28px 68px rgba(18, 29, 36, 0.17);
+  --motion-fast: 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-medium: 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-slow: 760ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -33,10 +39,10 @@ body {
   min-height: 100dvh;
   color: var(--ink);
   background:
-    linear-gradient(135deg, rgba(19, 32, 42, 0.06) 25%, transparent 25%) 0 0 / 18px 18px,
-    radial-gradient(circle at 11% 8%, rgba(47, 125, 109, 0.18), transparent 27rem),
-    radial-gradient(circle at 88% 0%, rgba(185, 109, 44, 0.13), transparent 24rem),
-    linear-gradient(180deg, #f4f1e8 0%, #e9edf0 34%, #dde5e7 100%);
+    radial-gradient(circle at 12% 4%, rgba(45, 132, 114, 0.2), transparent 30rem),
+    radial-gradient(circle at 82% 0%, rgba(178, 106, 47, 0.14), transparent 28rem),
+    linear-gradient(135deg, rgba(17, 29, 36, 0.045) 25%, transparent 25%) 0 0 / 18px 18px,
+    linear-gradient(180deg, #f4f1e8 0%, #e7ecea 36%, #d9e2e1 100%);
   font-family:
     "Geist",
     "Avenir Next",
@@ -62,6 +68,22 @@ body::before {
   mask-image: linear-gradient(180deg, black 0%, transparent 76%);
 }
 
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image:
+    radial-gradient(circle at 24% 32%, rgba(255, 255, 255, 0.5) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 72% 48%, rgba(17, 29, 36, 0.28) 0 1px, transparent 1.3px);
+  background-size:
+    22px 22px,
+    31px 31px;
+  mix-blend-mode: multiply;
+}
+
 button,
 select,
 input {
@@ -81,6 +103,7 @@ button:disabled {
   width: min(1500px, calc(100% - 36px));
   margin: 0 auto;
   padding: 18px 0 56px;
+  animation: appFade var(--motion-slow) both;
 }
 
 .commandNav {
@@ -92,14 +115,16 @@ button:disabled {
   gap: 16px;
   align-items: center;
   margin-bottom: 18px;
-  padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 248, 0.18);
-  border-radius: 14px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 255, 248, 0.2);
+  border-radius: 18px;
   color: #ecf2ed;
   background:
-    linear-gradient(135deg, rgba(19, 32, 42, 0.96), rgba(29, 45, 55, 0.92)),
+    linear-gradient(135deg, rgba(17, 29, 36, 0.96), rgba(36, 52, 58, 0.9)),
     var(--navy);
-  box-shadow: var(--shadow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.12),
+    0 22px 70px rgba(17, 29, 36, 0.22);
   backdrop-filter: blur(18px);
 }
 
@@ -122,9 +147,11 @@ button:disabled {
   width: 34px;
   height: 34px;
   place-items: center;
-  border-radius: 9px;
+  border-radius: 11px;
   color: var(--navy);
-  background: #d7f0df;
+  background:
+    linear-gradient(135deg, #e8f7ed, #9fd4c4),
+    #d7f0df;
   font-size: 12px;
   font-weight: 900;
 }
@@ -145,16 +172,27 @@ button:disabled {
   border-radius: 999px;
   background: #73d39b;
   box-shadow: 0 0 0 6px rgba(115, 211, 155, 0.12);
+  animation: livePulse 1.8s ease-in-out infinite;
 }
 
 .navLink {
   justify-self: end;
   padding: 9px 12px;
   border: 1px solid rgba(236, 242, 237, 0.16);
-  border-radius: 10px;
+  border-radius: 12px;
   color: rgba(236, 242, 237, 0.86);
   font-size: 13px;
   font-weight: 750;
+  transition:
+    background var(--motion-fast),
+    border-color var(--motion-fast),
+    transform var(--motion-fast);
+}
+
+.navLink:hover {
+  transform: translateY(-1px);
+  border-color: rgba(236, 242, 237, 0.28);
+  background: rgba(236, 242, 237, 0.08);
 }
 
 .userMenu {
@@ -169,17 +207,34 @@ button:disabled {
   grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
   gap: 32px;
   align-items: stretch;
-  min-height: 390px;
+  min-height: 440px;
   overflow: hidden;
-  padding: clamp(28px, 4vw, 54px);
-  border: 1px solid rgba(19, 32, 42, 0.15);
-  border-radius: 18px;
+  padding: clamp(34px, 5vw, 68px);
+  border: 1px solid rgba(255, 255, 248, 0.18);
+  border-radius: 26px;
   color: #f6f4ea;
   background:
-    linear-gradient(135deg, rgba(19, 32, 42, 0.98), rgba(28, 48, 55, 0.88)),
+    linear-gradient(135deg, rgba(13, 23, 29, 0.98), rgba(29, 47, 53, 0.9)),
     url("https://picsum.photos/seed/logistics-control-room/1800/1000") center / cover;
   background-blend-mode: multiply;
-  box-shadow: var(--shadow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.14),
+    0 36px 110px rgba(17, 29, 36, 0.24);
+  animation: panelRise var(--motion-slow) 80ms both;
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background:
+    linear-gradient(90deg, transparent, rgba(143, 208, 189, 0.14), transparent),
+    repeating-linear-gradient(90deg, rgba(255, 255, 248, 0.055) 0 1px, transparent 1px 92px);
+  transform: translateX(-72%);
+  animation: scanLine 7s ease-in-out infinite;
 }
 
 .authShell {
@@ -191,6 +246,7 @@ button:disabled {
   min-height: 100dvh;
   margin: 0 auto;
   padding: 48px 0;
+  animation: panelRise var(--motion-slow) both;
 }
 
 .authHero {
@@ -200,13 +256,15 @@ button:disabled {
   overflow: hidden;
   padding: clamp(32px, 5vw, 64px);
   border: 1px solid rgba(19, 32, 42, 0.15);
-  border-radius: 18px;
+  border-radius: 26px;
   color: #f6f4ea;
   background:
     linear-gradient(135deg, rgba(19, 32, 42, 0.98), rgba(28, 48, 55, 0.88)),
     url("https://picsum.photos/seed/operations-auth-control/1400/1200") center / cover;
   background-blend-mode: multiply;
-  box-shadow: var(--shadow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.14),
+    var(--shadow);
 }
 
 .authHero h1 {
@@ -219,10 +277,57 @@ button:disabled {
   justify-content: center;
   padding: 24px;
   border: 1px solid rgba(19, 32, 42, 0.14);
-  border-radius: 18px;
-  background: rgba(255, 255, 248, 0.86);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 248, 0.96), rgba(245, 242, 231, 0.88)),
+    rgba(255, 255, 248, 0.86);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(18px);
+}
+
+.authClerkRoot {
+  width: min(100%, 430px);
+}
+
+.authClerkCard {
+  width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(17, 29, 36, 0.18);
+}
+
+.authClerkInner {
+  border: 1px solid rgba(17, 29, 36, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 244, 0.98), rgba(244, 242, 233, 0.92)),
+    #fffdf4;
+}
+
+.authClerkTitle {
+  letter-spacing: -0.035em;
+}
+
+.authClerkSubtitle {
+  color: var(--muted);
+}
+
+.authClerkButton {
+  min-height: 44px;
+  background:
+    linear-gradient(135deg, var(--accent), var(--accent-dark)),
+    var(--accent) !important;
+  box-shadow: 0 16px 34px rgba(45, 132, 114, 0.22);
+}
+
+.authClerkSocialButton,
+.authClerkInput {
+  border-color: rgba(17, 29, 36, 0.12);
+  background: rgba(255, 255, 248, 0.88);
+}
+
+.authClerkLink {
+  color: var(--accent-dark);
+  font-weight: 780;
 }
 
 .topbar::after {
@@ -235,6 +340,7 @@ button:disabled {
   border-radius: 999px;
   pointer-events: none;
   background: radial-gradient(circle, rgba(47, 125, 109, 0.28), transparent 60%);
+  animation: ambientDrift 9s ease-in-out infinite alternate;
 }
 
 .topbar > * {
@@ -262,18 +368,18 @@ p {
 }
 
 h1 {
-  max-width: 48rem;
+  max-width: 56rem;
   margin-bottom: 20px;
-  font-size: clamp(44px, 6vw, 92px);
-  line-height: 0.88;
-  letter-spacing: -0.065em;
+  font-size: clamp(46px, 6vw, 98px);
+  line-height: 0.86;
+  letter-spacing: -0.07em;
   text-wrap: balance;
 }
 
 .lede {
-  max-width: 760px;
+  max-width: 720px;
   margin-bottom: 0;
-  color: rgba(246, 244, 234, 0.76);
+  color: rgba(246, 244, 234, 0.78);
   font-size: 18px;
   line-height: 1.55;
   text-wrap: pretty;
@@ -289,8 +395,9 @@ h1 {
   margin-top: 36px;
   overflow: hidden;
   border: 1px solid rgba(246, 244, 234, 0.14);
-  border-radius: 12px;
-  background: rgba(246, 244, 234, 0.07);
+  border-radius: 14px;
+  background: rgba(246, 244, 234, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 248, 0.1);
 }
 
 .signalLine span {
@@ -307,9 +414,9 @@ h1 {
 
 .commandCard {
   align-self: end;
-  padding: 22px;
+  padding: 24px;
   border: 1px solid rgba(246, 244, 234, 0.18);
-  border-radius: 16px;
+  border-radius: 22px;
   background:
     linear-gradient(180deg, rgba(255, 255, 248, 0.14), rgba(255, 255, 248, 0.08)),
     rgba(18, 30, 38, 0.64);
@@ -317,6 +424,7 @@ h1 {
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     0 22px 55px rgba(0, 0, 0, 0.22);
   backdrop-filter: blur(24px);
+  animation: panelRise var(--motion-slow) 220ms both;
 }
 
 .commandCard strong {
@@ -354,7 +462,7 @@ h1 {
 .sampleLink {
   min-height: 42px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 0 14px;
   display: inline-flex;
   align-items: center;
@@ -365,10 +473,11 @@ h1 {
   font-weight: 780;
   text-decoration: none;
   transition:
-    transform 220ms ease,
-    border-color 220ms ease,
-    background 220ms ease,
-    box-shadow 220ms ease;
+    transform var(--motion-fast),
+    border-color var(--motion-fast),
+    background var(--motion-fast),
+    box-shadow var(--motion-fast),
+    color var(--motion-fast);
 }
 
 .fileButton:hover,
@@ -377,9 +486,19 @@ h1 {
 .modeButton:hover,
 .reviewActions button:hover,
 .sampleLink:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.01);
   border-color: var(--line-strong);
-  box-shadow: 0 10px 24px rgba(16, 24, 32, 0.1);
+  box-shadow: 0 14px 34px rgba(16, 24, 32, 0.12);
+}
+
+.fileButton:active,
+.primaryButton:active,
+.ghostButton:active,
+.smallButton:active,
+.modeButton:active,
+.reviewActions button:active,
+.sampleLink:active {
+  transform: translateY(1px) scale(0.99);
 }
 
 .fileButton {
@@ -387,7 +506,10 @@ h1 {
   overflow: hidden;
   color: #fffdf4;
   border-color: rgba(151, 209, 189, 0.28);
-  background: var(--accent);
+  background:
+    linear-gradient(135deg, var(--accent), var(--accent-dark)),
+    var(--accent);
+  box-shadow: 0 14px 28px rgba(45, 132, 114, 0.2);
 }
 
 .fileButton input {
@@ -399,8 +521,11 @@ h1 {
 .primaryButton {
   min-width: 156px;
   color: #fffdf4;
-  border-color: #101820;
-  background: #101820;
+  border-color: #111a20;
+  background:
+    linear-gradient(135deg, #111a20, #20343b),
+    #101820;
+  box-shadow: 0 18px 34px rgba(17, 29, 36, 0.22);
 }
 
 .ghostButton {
@@ -412,7 +537,9 @@ h1 {
 .modeButton.active {
   color: #fffdf4;
   border-color: var(--accent-dark);
-  background: var(--accent-dark);
+  background:
+    linear-gradient(135deg, var(--accent), var(--accent-dark)),
+    var(--accent-dark);
   box-shadow: 0 10px 28px rgba(47, 125, 109, 0.22);
 }
 
@@ -453,15 +580,40 @@ h1 {
 }
 
 .controlStrip {
+  position: relative;
   align-items: end;
   justify-content: space-between;
-  margin: 18px 0;
-  padding: 12px;
-  border: 1px solid rgba(19, 32, 42, 0.14);
-  border-radius: 16px;
-  background: rgba(255, 255, 248, 0.72);
-  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  margin: -24px auto 20px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 248, 0.5);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 248, 0.9), rgba(238, 239, 232, 0.78)),
+    rgba(255, 255, 248, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.76),
+    0 22px 70px rgba(17, 29, 36, 0.14);
   backdrop-filter: blur(18px);
+  animation: panelRise var(--motion-slow) 180ms both;
+}
+
+.controlStrip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.8;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(45, 132, 114, 0.16), transparent 18rem),
+    linear-gradient(90deg, transparent, rgba(255, 255, 248, 0.55), transparent);
+  transform: translateX(-64%);
+  animation: scanLine 8.5s ease-in-out infinite;
+}
+
+.controlStrip > * {
+  position: relative;
+  z-index: 1;
 }
 
 .processedAt {
@@ -513,19 +665,61 @@ h1 {
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 14px;
+  margin-bottom: 20px;
 }
 
 .metricsGrid article {
+  position: relative;
   min-height: 112px;
   padding: 18px;
-  border: 1px solid rgba(19, 32, 42, 0.12);
-  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 248, 0.65);
+  border-radius: 18px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 248, 0.96), rgba(243, 242, 234, 0.88)),
+    linear-gradient(180deg, rgba(255, 255, 248, 0.98), rgba(236, 238, 232, 0.9)),
     var(--surface);
-  box-shadow: var(--shadow-soft);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.88),
+    var(--shadow-soft);
+  animation: panelRise var(--motion-slow) both;
+  transition:
+    transform var(--motion-medium),
+    box-shadow var(--motion-medium);
+}
+
+.metricsGrid article::before {
+  content: "";
+  position: absolute;
+  inset: auto 14px 0;
+  height: 3px;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(90deg, rgba(45, 132, 114, 0.18), rgba(45, 132, 114, 0.72), rgba(178, 106, 47, 0.42));
+}
+
+.metricsGrid article:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.metricsGrid article:nth-child(1) {
+  animation-delay: 120ms;
+}
+
+.metricsGrid article:nth-child(2) {
+  animation-delay: 170ms;
+}
+
+.metricsGrid article:nth-child(3) {
+  animation-delay: 220ms;
+}
+
+.metricsGrid article:nth-child(4) {
+  animation-delay: 270ms;
+}
+
+.metricsGrid article:nth-child(5) {
+  animation-delay: 320ms;
 }
 
 .metricsGrid span,
@@ -556,19 +750,38 @@ td span,
 }
 
 .handoffPanel {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) auto;
   gap: 18px;
   align-items: center;
-  margin-bottom: 18px;
-  padding: 20px;
-  border: 1px solid rgba(19, 32, 42, 0.14);
-  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 248, 0.16);
+  border-radius: 22px;
   background:
-    linear-gradient(135deg, rgba(19, 32, 42, 0.96), rgba(29, 45, 55, 0.92)),
+    linear-gradient(135deg, rgba(17, 29, 36, 0.98), rgba(36, 52, 58, 0.94)),
     var(--navy);
   color: #fffdf4;
   box-shadow: var(--shadow);
+  animation: panelRise var(--motion-slow) 260ms both;
+}
+
+.handoffPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(45, 132, 114, 0.22), transparent 21rem),
+    repeating-linear-gradient(90deg, rgba(255, 255, 248, 0.055) 0 1px, transparent 1px 86px);
+}
+
+.handoffPanel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .handoffPanel .sectionLabel {
@@ -598,8 +811,20 @@ td span,
   min-height: 136px;
   padding: 14px;
   border: 1px solid rgba(255, 253, 244, 0.13);
-  border-radius: 14px;
-  background: rgba(255, 253, 244, 0.07);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 244, 0.1), rgba(255, 253, 244, 0.055)),
+    rgba(255, 253, 244, 0.07);
+  transition:
+    transform var(--motion-medium),
+    background var(--motion-medium),
+    border-color var(--motion-medium);
+}
+
+.handoffQueues article:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 253, 244, 0.24);
+  background: rgba(255, 253, 244, 0.12);
 }
 
 .handoffQueues span {
@@ -654,7 +879,7 @@ td span,
 .workspaceGrid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 18px;
+  gap: 20px;
   align-items: start;
 }
 
@@ -668,11 +893,38 @@ td span,
 
 .panel,
 .docsPanel {
-  border: 1px solid rgba(19, 32, 42, 0.14);
-  border-radius: 16px;
-  background: rgba(255, 255, 248, 0.9);
-  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 248, 0.68);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 248, 0.95), rgba(241, 242, 235, 0.86)),
+    rgba(255, 255, 248, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.88),
+    var(--shadow-soft);
   backdrop-filter: blur(18px);
+  animation: panelRise var(--motion-slow) 340ms both;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.52;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(45, 132, 114, 0.12), transparent 18rem),
+    linear-gradient(90deg, transparent, rgba(255, 255, 248, 0.5), transparent);
+  transform: translateX(-82%);
+  animation: scanLine 11s ease-in-out infinite;
+}
+
+.panel > *,
+.docsPanel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .panelHeader {
@@ -680,7 +932,7 @@ td span,
   gap: 16px;
   align-items: start;
   justify-content: space-between;
-  padding: 20px;
+  padding: 22px;
   border-bottom: 1px solid rgba(19, 32, 42, 0.1);
 }
 
@@ -700,7 +952,9 @@ td span,
   align-items: center;
   padding: 14px 20px;
   border-bottom: 1px solid rgba(19, 32, 42, 0.1);
-  background: rgba(230, 235, 236, 0.42);
+  background:
+    linear-gradient(90deg, rgba(230, 235, 236, 0.58), rgba(255, 255, 248, 0.38)),
+    rgba(230, 235, 236, 0.42);
 }
 
 .filterLabel {
@@ -712,10 +966,19 @@ td span,
   min-width: 132px;
   height: 38px;
   border: 1px solid rgba(19, 32, 42, 0.14);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 0 10px;
   color: var(--ink);
   background: #fffdf6;
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.filters select:focus {
+  outline: 3px solid rgba(45, 132, 114, 0.16);
+  border-color: rgba(45, 132, 114, 0.62);
+  box-shadow: 0 12px 26px rgba(17, 29, 36, 0.08);
 }
 
 .tableWrap {
@@ -763,9 +1026,9 @@ td strong {
 
 tbody tr {
   transition:
-    background 180ms ease,
-    box-shadow 180ms ease,
-    transform 180ms ease;
+    background var(--motion-fast),
+    box-shadow var(--motion-fast),
+    transform var(--motion-fast);
 }
 
 tbody tr:hover,
@@ -780,7 +1043,7 @@ tbody tr:hover {
 .badge,
 .status {
   width: max-content;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 5px 9px;
   border: 1px solid transparent;
   font-size: 12px;
@@ -856,8 +1119,10 @@ tbody tr:hover {
   min-height: 78px;
   padding: 12px;
   border: 1px solid rgba(19, 32, 42, 0.11);
-  border-radius: 13px;
-  background: rgba(19, 32, 42, 0.04);
+  border-radius: 15px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 248, 0.52), rgba(17, 29, 36, 0.04)),
+    rgba(19, 32, 42, 0.04);
 }
 
 .decisionStrip span {
@@ -881,11 +1146,21 @@ tbody tr:hover {
 .detailStack section,
 .emptyState {
   padding: 16px;
-  border: 1px solid rgba(19, 32, 42, 0.11);
-  border-radius: 14px;
+  border: 1px solid rgba(19, 32, 42, 0.1);
+  border-radius: 16px;
   background:
     linear-gradient(180deg, rgba(255, 255, 248, 0.96), rgba(244, 243, 235, 0.92)),
     #fffdf6;
+  transition:
+    transform var(--motion-medium),
+    box-shadow var(--motion-medium),
+    border-color var(--motion-medium);
+}
+
+.detailStack section:hover {
+  transform: translateY(-2px);
+  border-color: rgba(45, 132, 114, 0.2);
+  box-shadow: 0 16px 34px rgba(17, 29, 36, 0.08);
 }
 
 .detailStack h3 {
@@ -925,8 +1200,10 @@ tbody tr:hover {
   align-items: flex-start;
   padding: 14px;
   border: 1px solid rgba(19, 32, 42, 0.11);
-  border-radius: 13px;
-  background: rgba(19, 32, 42, 0.035);
+  border-radius: 15px;
+  background:
+    linear-gradient(90deg, rgba(45, 132, 114, 0.08), rgba(19, 32, 42, 0.035)),
+    rgba(19, 32, 42, 0.035);
 }
 
 .decisionReceipt p {
@@ -947,6 +1224,7 @@ tbody tr:hover {
   padding: 14px 16px;
   flex-direction: column;
   text-align: left;
+  box-shadow: none;
 }
 
 .reviewActions button strong {
@@ -1015,8 +1293,20 @@ tbody tr:hover {
   min-height: 96px;
   padding: 13px;
   border: 1px solid rgba(19, 32, 42, 0.11);
-  border-radius: 13px;
-  background: rgba(255, 255, 248, 0.7);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 248, 0.9), rgba(241, 242, 235, 0.74)),
+    rgba(255, 255, 248, 0.7);
+  transition:
+    transform var(--motion-medium),
+    border-color var(--motion-medium),
+    box-shadow var(--motion-medium);
+}
+
+.docsGrid article:hover {
+  transform: translateY(-3px);
+  border-color: rgba(45, 132, 114, 0.22);
+  box-shadow: 0 18px 40px rgba(17, 29, 36, 0.1);
 }
 
 .docsGrid h3 {
@@ -1033,6 +1323,67 @@ code {
     ui-monospace,
     monospace;
   font-size: 12px;
+}
+
+@keyframes appFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes panelRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes scanLine {
+  0%,
+  42% {
+    transform: translateX(-82%);
+  }
+  72%,
+  100% {
+    transform: translateX(82%);
+  }
+}
+
+@keyframes ambientDrift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-4%, -3%, 0) scale(1.08);
+  }
+}
+
+@keyframes livePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 5px rgba(115, 211, 155, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(115, 211, 155, 0.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }
 
 @media (max-width: 1120px) {
@@ -1089,11 +1440,13 @@ code {
 
   .authShell {
     width: min(100% - 20px, 1180px);
+    gap: 16px;
+    align-items: start;
     padding: 10px 0 32px;
   }
 
   .authHero {
-    min-height: 360px;
+    min-height: 300px;
   }
 
   .topbar {

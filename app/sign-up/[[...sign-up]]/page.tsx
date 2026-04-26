@@ -1,4 +1,5 @@
 import { SignUp } from "@clerk/nextjs";
+import { authAppearance } from "@/app/auth-appearance";
 
 export default function SignUpPage() {
   return (
@@ -13,7 +14,7 @@ export default function SignUpPage() {
         </div>
       </section>
       <section className="authPanel" aria-label="Sign up form">
-        <SignUp signInUrl="/sign-in" fallbackRedirectUrl="/" />
+        <SignUp appearance={authAppearance} signInUrl="/sign-in" fallbackRedirectUrl="/" />
       </section>
     </main>
   );

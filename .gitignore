@@ -6,3 +6,6 @@ tsconfig.tsbuildinfo
 .vercel
 dist
 coverage
+
+# clerk configuration (can include secrets)
+/.clerk/
