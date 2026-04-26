@@ -18,4 +18,10 @@ describe("visual design system", () => {
     expect(css).toContain(".panel::before");
     expect(css).toContain(".tablePanel");
   });
+
+  it("fills the lower queue area with a purposeful operations footer", () => {
+    expect(css).toContain(".queueFooter");
+    expect(css).toContain(".queueFooterCard");
+    expect(css).toContain(".queueNextRun");
+  });
 });

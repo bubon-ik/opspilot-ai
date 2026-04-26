@@ -143,6 +143,19 @@ export default function Home() {
     };
   }, [results]);
 
+  const queueFocus = useMemo(() => {
+    const source = results.length ? filteredResults : tickets;
+    const visibleCount = source.length;
+    const urgentCount = results.filter((result) => result.priority === "Critical" || result.priority === "High").length;
+    const unresolvedCount = results.filter((result) => result.status === "New" || result.status === "Needs Review").length;
+
+    return {
+      visibleCount,
+      urgentCount,
+      unresolvedCount
+    };
+  }, [filteredResults, results, tickets]);
+
   async function runAiTriage(nextMode = mode) {
     setError("");
     const trimmedApiKey = apiKey.trim();
@@ -499,6 +512,33 @@ export default function Home() {
                 })}
               </tbody>
             </table>
+          </div>
+
+          <div className="queueFooter" aria-label="Queue follow-up summary">
+            <article className="queueFooterCard">
+              <span>Current view</span>
+              <strong>{queueFocus.visibleCount}</strong>
+              <p>{results.length ? "AI triage rows match the active filters." : "Imported tickets are waiting for AI triage."}</p>
+            </article>
+            <article className="queueFooterCard">
+              <span>Needs attention</span>
+              <strong>{results.length ? queueFocus.unresolvedCount : tickets.length}</strong>
+              <p>{results.length ? "Items still need an operator decision." : "Run triage to classify ownership and priority."}</p>
+            </article>
+            <article className="queueNextRun">
+              <div>
+                <span>Suggested next step</span>
+                <strong>{results.length ? "Review high-impact tickets" : "Start with the sample queue"}</strong>
+                <p>
+                  {results.length
+                    ? `${queueFocus.urgentCount} critical or high priority items should be checked before export.`
+                    : "Paste a provider key, run AI triage, then approve or route each recommendation."}
+                </p>
+              </div>
+              <button className="smallButton" disabled={isProcessing || tickets.length === 0} type="button" onClick={() => runAiTriage()}>
+                {results.length ? "Run again" : "Run triage"}
+              </button>
+            </article>
           </div>
         </div>
 
