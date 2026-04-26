@@ -319,10 +319,40 @@ button:disabled {
   box-shadow: 0 16px 34px rgba(45, 132, 114, 0.22);
 }
 
+.authClerkButton[data-loading="true"] {
+  cursor: progress;
+  opacity: 0.82;
+}
+
 .authClerkSocialButton,
 .authClerkInput {
   border-color: rgba(17, 29, 36, 0.12);
   background: rgba(255, 255, 248, 0.88);
+}
+
+.authClerkError {
+  margin-top: 7px;
+  color: #8b241b;
+  font-size: 13px;
+  font-weight: 760;
+  line-height: 1.35;
+}
+
+.authClerkAlert {
+  border: 1px solid rgba(160, 70, 60, 0.28);
+  border-radius: 14px;
+  color: #762019;
+  background:
+    linear-gradient(180deg, rgba(255, 240, 237, 0.96), rgba(255, 232, 226, 0.9)),
+    #fff0ed;
+  box-shadow: 0 14px 30px rgba(160, 70, 60, 0.12);
+}
+
+.authClerkAlertText {
+  color: #762019;
+  font-size: 13px;
+  font-weight: 760;
+  line-height: 1.4;
 }
 
 .authClerkLink {

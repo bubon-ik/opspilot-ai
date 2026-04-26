@@ -24,4 +24,10 @@ describe("visual design system", () => {
     expect(css).toContain(".queueFooterCard");
     expect(css).toContain(".queueNextRun");
   });
+
+  it("keeps Clerk authentication errors visible", () => {
+    expect(css).toContain(".authClerkError");
+    expect(css).toContain(".authClerkAlert");
+    expect(css).toContain(".authClerkButton[data-loading=\"true\"]");
+  });
 });

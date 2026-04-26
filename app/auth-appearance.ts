@@ -22,6 +22,10 @@ export const authAppearance = {
     formButtonPrimary: "authClerkButton",
     socialButtonsBlockButton: "authClerkSocialButton",
     formFieldInput: "authClerkInput",
+    formFieldErrorText: "authClerkError",
+    formFieldWarningText: "authClerkError",
+    alert: "authClerkAlert",
+    alertText: "authClerkAlertText",
     footerActionLink: "authClerkLink"
   }
 } as const;
